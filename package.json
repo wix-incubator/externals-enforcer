@@ -1,0 +1,39 @@
+{
+  "name": "externals-enforcer",
+  "version": "1.0.0",
+  "description": "A webpack plugin to enforce externals",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "keywords": [
+    "Wix",
+    "Externals",
+    "enforcer",
+    "Webpack",
+    "plugin"
+  ],
+  "scripts": {
+    "test": "jest --detectOpenHandles"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wix-incubator/externals-enforcer.git"
+  },
+  "author": "Nachshon Schwartz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wix-incubator/externals-enforcer/issues"
+  },
+  "homepage": "https://github.com/wix-incubator/externals-enforcer#readme",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "flush-promises": "^1.0.0",
+    "jest": "^23.2.0",
+    "lodash": "^4.17.10",
+    "webpack": "^4.12.2",
+    "webpack-merge": "^4.1.3"
+  }
+}
