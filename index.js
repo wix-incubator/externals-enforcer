@@ -2,38 +2,40 @@ module.exports = function ExternalsEnforcer (options) {
   this.options = options;
 
   this.apply = (compiler) => {
-    compiler.hooks.afterCompile.tap("ExternalsEnforcerPlugin", ({options, requestShortener}) => {
+    compiler.hooks.afterCompile.tap("ExternalsEnforcerPlugin", ({options, requestShortener, fileDependencies}) => {
       const base = '/node_modules/';
 
       const externals = Object.keys(options.externals);
-      const fileDependencies = [...requestShortener.cache.keys()].filter(a => a[0] !== '/' && a[0] !== '.');
+      // const fileDependencies = [...requestShortener.cache.keys()].filter(a => a[0] !== '/' && a[0] !== '.');
 
       const wronglyImportedExternals = {};
       const paths = [];
 
       fileDependencies.forEach((filename) => {
         let possibleWronglyImportedExternals = [];
-        let externalExists = false;
+        let isSpecificExternal = false;
 
         externals.forEach((external) => {
-          const index = filename.indexOf(`${external}`);
+          const index = filename.indexOf(`${base}${external}/`);
           if (index < 0) {
             return;
           }
 
-          if (filename === external) {
-            externalExists = true;
-          } else if(filename[external.length] === '/') {
-            possibleWronglyImportedExternals.push(external);
+          const dependencyPath = filename.substr(index);
+
+          if (dependencyPath === '') {
+            isSpecificExternal = true;
           }
+
+          possibleWronglyImportedExternals.push(external);
         });
 
-        if (!externalExists) {
+        if (!isSpecificExternal && possibleWronglyImportedExternals.length) {
           possibleWronglyImportedExternals.forEach(external => {
             wronglyImportedExternals[external] = true;
           });
 
-          paths.push(filename);
+          paths.push(filename.substr(filename.indexOf(base)));
         }
       });
 

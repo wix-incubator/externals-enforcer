@@ -40,27 +40,32 @@ describe('external enforcer', () => {
 
   it('should pass when import matches the external exactly', async () => {
     await setup('test-entry', {'lodash': '_'});
+    expect(error).toBeUndefined();
     expect(stats).toEqual(SUCESS_STATS);
   });
 
   it('should pass when no matching external', async () => {
     await setup('test-entry', {});
+    expect(error).toBeUndefined();
     expect(stats).toEqual(SUCESS_STATS);
   });
 
-  it('should fail when import is under nested in external', async () => {
+  it('should fail when import is nested under the external', async () => {
     await setup('test-fail-entry', {'lodash': '_'});
+    expect(stats).toBeUndefined();
     expect(error).toContain('[lodash]');
     expect(error).toContain('lodash/values');
   });
 
   it('should pass when both nested and regular external are defined and import nested', async () => {
     await setup('test-fail-entry', {'lodash': '_', 'lodash/values': 'asd'});
+    expect(error).toBeUndefined();
     expect(stats).toEqual(SUCESS_STATS);
   });
 
   it('should pass when import external with same prefix', async () => {
     await setup('test-entry', {'lodas': '_'});
+    expect(error).toBeUndefined();
     expect(stats).toEqual(SUCESS_STATS);
   });
 });
